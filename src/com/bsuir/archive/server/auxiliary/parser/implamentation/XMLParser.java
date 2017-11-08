@@ -53,14 +53,15 @@ public class XMLParser implements XMLParsers {
     @Override
     public <H> String dataToXML(Class clasStudied, List<H> list) throws ParserException{
         String Result = null;
-        if ( (list!=null) && (!list.isEmpty())) {
-            Field[] publicFields = clasStudied.getDeclaredFields();
+//        if ( (list!=null) && (!list.isEmpty())) {
+        if ( (list!=null)) {
+            Field[] privateFields = clasStudied.getDeclaredFields();
             StringBuffer xml = new StringBuffer();
             xml.append(HEADER);
             xml.append(ATTRIBUTE_LIST);
             for (H item : list) {
                 xml.append(ATTRIBUTE_CELL);
-                for (Field field : publicFields) {
+                for (Field field : privateFields) {
                     Object value = null;
                     try {
                         if (!field.isAccessible()) {
@@ -116,8 +117,10 @@ public class XMLParser implements XMLParsers {
             if(match.find()){
                 try {
                     String methodName = String.format("set%s",firstUpperCase(field.getName()));
-                    Method method = clasStudied.getMethod(methodName, new Class[]{String.class});
-                    method.invoke(dossier, match.group(1));
+                    Class[] parameterTypes = definitionOfParameters(methodName, clasStudied);
+                    Method method = clasStudied.getMethod(methodName, parameterTypes);
+                    Object obj = cast(match.group(1),parameterTypes);
+                    method.invoke(dossier,obj);
                 }
                 catch (Exception ex){
                     throw  new ParserException("Error setting field", ex);
@@ -126,6 +129,40 @@ public class XMLParser implements XMLParsers {
         }
         return  dossier;
     }
+
+    private Object cast(String param,Class[] parameterTypes) throws ParserException {
+        Object obj = null;
+
+        Class paramType = parameterTypes[0];
+        if (paramType.equals(Integer.class)){
+            obj = new Integer(0);
+            obj = Integer.parseInt(param);
+        }
+        if (paramType.equals(Boolean.class)){
+            obj = new Boolean(false);
+            obj = Boolean.parseBoolean(param);
+        }
+        if (paramType.equals(String.class)){
+            obj = new String(param);
+        }
+        return obj;
+
+    }
+
+    private Class[] definitionOfParameters(String methodName, Class clasStudied ) {
+        //return  new Class[]{Integer.class};
+        Class[] parameterTypes = null;
+        Method[] methods = clasStudied.getMethods();
+
+        for (Method method: methods) {
+            if (method.getName().equals(methodName)){
+                parameterTypes = method.getParameterTypes();
+                break;
+            }
+        }
+        return parameterTypes;
+    }
+
     private String firstUpperCase(String word){
         if(word == null || word.isEmpty()) return "";
         return word.substring(0, 1).toUpperCase() + word.substring(1);
