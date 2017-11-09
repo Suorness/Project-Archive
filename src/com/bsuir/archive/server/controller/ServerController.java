@@ -9,17 +9,17 @@ public class ServerController {
     private int port = 1212;
     public void Start(){
         try {
-            ServerSocket ss = new ServerSocket(port);
-            while(true) {
+            ServerSocket serverSocket = new ServerSocket(port);
+            while(!serverSocket.isClosed()) {
                 System.out.println("Ожидание подключения");
-                Socket socket = ss.accept();
+                Socket socket = serverSocket.accept();
                 Thread thread =  new Thread(new Controller(socket));
                 thread.start();
                 System.out.println("Клиент подключен");
             }
 
         }catch (IOException ex){
-
+//TODO
         }
     }
 }

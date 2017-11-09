@@ -17,6 +17,7 @@ import java.util.List;
 public class XMLUserDAO implements UserDAO {
     private static final String PATH = System.getProperty("user.dir")+ "/user.xml";
     private static XMLUserDAO instance = new XMLUserDAO();
+    private final static Object lock = new Object();
     private WriterFile writer;
     private XMLParsers parser;
     public static XMLUserDAO getInstance(){
@@ -30,28 +31,30 @@ public class XMLUserDAO implements UserDAO {
 
     @Override
     public List<User> getList() throws DAOException {
-        List<User> list;
-        String savedData;
-        try {
-            savedData = writer.readData(PATH);
+        synchronized (lock) {
+            List<User> list;
+            String savedData;
+            try {
+                savedData = writer.readData(PATH);
+            } catch (FileWriterException ex) {
+                throw new DAOException("Error reading file", ex);
+            }
+            list = listFormation(savedData);
+            return list;
         }
-        catch (FileWriterException ex){
-            throw new DAOException("Error reading file",ex);
-        }
-        list  = listFormation(savedData);
-        return list;
     }
 
     @Override
     public void setList(List<User> list) throws DAOException {
-        String dataToSave;
-        if (list!=null){
-            dataToSave = stringFormation(list);
-            try {
-                writer.writeData(PATH,dataToSave);
-            }
-            catch (FileWriterException ex){
-                throw new DAOException("Error writting in file",ex);
+        synchronized (lock) {
+            String dataToSave;
+            if (list != null) {
+                dataToSave = stringFormation(list);
+                try {
+                    writer.writeData(PATH, dataToSave);
+                } catch (FileWriterException ex) {
+                    throw new DAOException("Error writting in file", ex);
+                }
             }
         }
     }

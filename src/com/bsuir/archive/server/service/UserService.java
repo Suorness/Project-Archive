@@ -9,4 +9,5 @@ public interface UserService {
     boolean delUser(User user) throws ServiceException;
     boolean changeUser(User user, User newUser) throws ServiceException;
     void clear() throws ServiceException;
+    User findUser(int id) throws ServiceException;
 }

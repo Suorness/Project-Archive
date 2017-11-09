@@ -109,6 +109,24 @@ public class UserServiceImplementation implements UserService {
         }
     }
 
+    @Override
+    public User findUser(int id) throws ServiceException {
+        List<User> list;
+        try {
+            list = userDAO.getList();
+        }catch (DAOException ex){
+            throw  new ServiceException(ex);
+        }
+
+        User detectedUser = null;
+        for (User item: list) {
+            if (item.getId().equals(id)){
+                detectedUser = item;
+            }
+        }
+        return detectedUser;
+    }
+
     private UserServiceImplementation(){
         DAOFactory daoFactory = DAOFactory.getInstance();
         userDAO = daoFactory.getUserDAO();

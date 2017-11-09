@@ -2,34 +2,26 @@ package com.bsuir.archive.server.controller.command.implamentation;
 
 import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
-import com.bsuir.archive.server.domain.Dossier;
-import com.bsuir.archive.server.service.DossierService;
 import com.bsuir.archive.server.service.ServiceFactory;
-import com.bsuir.archive.server.service.exception.ServiceException;
+import com.bsuir.archive.server.service.UserService;
 
-public class AddDossierCommand implements Command {
+public class LogOutCommand implements Command {
 
-    public AddDossierCommand() {
 
+    UserManager manager;
+    UserService userService;
+
+    public LogOutCommand(UserManager userManager) {
+        manager = userManager;
         ServiceFactory factory = ServiceFactory.getInstance();
-        dossierService = factory.getDossierService();
+        userService = factory.getUserService();
     }
-
-    DossierService dossierService;
-
     @Override
     public String execute(String[] param) {
-        String response = "Добавлено";
-        Dossier dossier = new Dossier();
-        dossier.setFirstName(param[1]);
-        dossier.setLastName(param[2]);
-        dossier.setGroupNumber(param[3]);
-        try {
-            dossierService.addDossier(dossier);
-        } catch (ServiceException ex) {
-            //TODO
-            response = "Ошибка добавления";
-        }
+        String response = "";
+
+        manager.logOut();
+        response = "Операция прошла успешно";
 
         return response;
     }
@@ -65,11 +57,10 @@ public class AddDossierCommand implements Command {
     }
 
 
-    private static final int countParam = 4;
-    private String description = "Adding a dossier: add|firstname|lastname|group number";
-    Boolean AccessSee = false;
-    Boolean AccessWrite = true;
+    private String description = "Change user: logout";
+    private static final int countParam = 1;
+    Boolean AccessSee = true;
+    Boolean AccessWrite = false;
     Boolean AccessChange = false;
     Boolean AccessAdmin = false;
-
 }

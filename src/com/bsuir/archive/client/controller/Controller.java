@@ -10,20 +10,30 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class Controller {
-    public Controller() {
+    public Controller(int serverPort, String address) {
 
         view = new ConsoleView();
         reader = new ConsoleReader();
+        this.serverPort = serverPort;
+        this.address = address;
     }
+
     private View view;
     private Reader reader;
-    private  int serverPort = 1212;
+    private int serverPort;
     private String address;
     private Socket socket;
-    public void Start(){
-        connection(1212);
+
+    public void Start() {
+        try {
+            connection();
+        }catch (Exception ex){
+            view.showErrorInfo("Не удалось подключиться к серверу ");
+        }
     }
-    private void connection(int port){
+
+    private void connection() {
+        Boolean working = true;
         try {
             InetAddress ipAddress = InetAddress.getByName(address);
             socket = new Socket(ipAddress, serverPort);
@@ -33,19 +43,45 @@ public class Controller {
             DataOutputStream out = new DataOutputStream(sout);
 
             String line = null;
-            while (true) {
+            while (working) {
                 line = in.readUTF();
-                view.outputLine("Сервер: "+line);
+                view.outputLine("Сервер:\r\n" + line);
                 line = reader.dataInputString();
-                out.writeUTF(line);
-                out.flush();
-                line = in.readUTF();
-                view.outputLine("Сервер: "+line);
-
+                if (!checkCompletion(line)) {
+                    out.writeUTF(line);
+                    out.flush();
+                    line = in.readUTF();
+                    view.outputLine("Сервер:\r\n" + line);
+                } else {
+                    working = false;
+                }
             }
 
-        }catch (IOException ex){
+        } catch (IOException ex) {
             view.showErrorInfo(ex.getMessage());
         }
+        try {
+            socket.shutdownOutput();
+        } catch (IOException ex) {
+            view.showErrorInfo(ex.getMessage());
+        }
+        try {
+            socket.shutdownInput();
+        } catch (IOException ex) {
+            view.showErrorInfo(ex.getMessage());
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            view.showErrorInfo(ex.getMessage());
+        }
+    }
+
+    boolean checkCompletion(String str) {
+        Boolean result = false;
+        if (str.equals("exit")) {
+            result = true;
+        }
+        return result;
     }
 }

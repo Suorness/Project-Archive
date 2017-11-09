@@ -1,36 +1,37 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
-import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.Dossier;
 import com.bsuir.archive.server.service.DossierService;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.exception.ServiceException;
 
-public class AddDossierCommand implements Command {
+public class DeleteDossierCommand implements Command {
 
-    public AddDossierCommand() {
+    public DeleteDossierCommand() {
 
         ServiceFactory factory = ServiceFactory.getInstance();
         dossierService = factory.getDossierService();
     }
 
     DossierService dossierService;
-
     @Override
     public String execute(String[] param) {
-        String response = "Добавлено";
+        String response = "Удалено";
         Dossier dossier = new Dossier();
         dossier.setFirstName(param[1]);
         dossier.setLastName(param[2]);
         dossier.setGroupNumber(param[3]);
+        Boolean result = true;
         try {
-            dossierService.addDossier(dossier);
+            result = dossierService.delDossier(dossier);
         } catch (ServiceException ex) {
             //TODO
             response = "Ошибка добавления";
         }
-
+        if (!result){
+            response = "Не удалось удалить";
+        }
         return response;
     }
 
@@ -64,12 +65,10 @@ public class AddDossierCommand implements Command {
         return AccessAdmin;
     }
 
-
     private static final int countParam = 4;
-    private String description = "Adding a dossier: add|firstname|lastname|group number";
+    private String description = "Delete a dossier: delete|firstname|lastname|group number";
     Boolean AccessSee = false;
     Boolean AccessWrite = true;
-    Boolean AccessChange = false;
+    Boolean AccessChange = true;
     Boolean AccessAdmin = false;
-
 }

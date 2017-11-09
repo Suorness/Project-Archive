@@ -10,7 +10,8 @@ public class User {
     public User(Integer id, Boolean accessSee,Boolean accessWrite,Boolean accessChange){
         this.id = id;
         this.accessSee = accessSee;
-        this.accessWrite = accessChange;
+        this.accessWrite = accessWrite;
+        this.accessChange = accessChange;
     }
     public Integer getId() {
         return id;

@@ -19,6 +19,7 @@ public class XMLDossierDAO implements DossierDAO{
     private WriterFile writer;
     private XMLParsers parser;
     private static final String PATH = System.getProperty("user.dir")+ "/dossier.xml";
+    private final static Object lock = new Object();
 
     public static XMLDossierDAO getInstance() {
         return instance;
@@ -29,28 +30,30 @@ public class XMLDossierDAO implements DossierDAO{
     }
     @Override
     public List<Dossier> getList() throws DAOException {
-        List<Dossier> list;
-        String savedData;
-        try {
-            savedData = writer.readData(PATH);
+        synchronized (lock) {
+            List<Dossier> list;
+            String savedData;
+            try {
+                savedData = writer.readData(PATH);
+            } catch (FileWriterException ex) {
+                throw new DAOException("Error reading file", ex);
+            }
+            list = listFormation(savedData);
+            return list;
         }
-        catch (FileWriterException ex){
-            throw new DAOException("Error reading file",ex);
-        }
-        list  = listFormation(savedData);
-        return list;
     }
 
     @Override
     public void setList(List<Dossier> list) throws DAOException {
-        String dataToSave;
-        if (list!=null){
-            dataToSave = stringFormation(list);
-            try {
-                writer.writeData(PATH,dataToSave);
-            }
-            catch (FileWriterException ex){
-                throw new DAOException("Error writting in file",ex);
+        synchronized (lock) {
+            String dataToSave;
+            if (list != null) {
+                dataToSave = stringFormation(list);
+                try {
+                    writer.writeData(PATH, dataToSave);
+                } catch (FileWriterException ex) {
+                    throw new DAOException("Error writting in file", ex);
+                }
             }
         }
     }

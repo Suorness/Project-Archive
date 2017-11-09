@@ -1,15 +1,17 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
-import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.Dossier;
 import com.bsuir.archive.server.service.DossierService;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.exception.ServiceException;
+import sun.invoke.empty.Empty;
 
-public class AddDossierCommand implements Command {
+import java.util.List;
 
-    public AddDossierCommand() {
+public class GetAllDossierCommand implements Command {
+
+    public GetAllDossierCommand() {
 
         ServiceFactory factory = ServiceFactory.getInstance();
         dossierService = factory.getDossierService();
@@ -17,20 +19,29 @@ public class AddDossierCommand implements Command {
 
     DossierService dossierService;
 
+
     @Override
     public String execute(String[] param) {
-        String response = "Добавлено";
-        Dossier dossier = new Dossier();
-        dossier.setFirstName(param[1]);
-        dossier.setLastName(param[2]);
-        dossier.setGroupNumber(param[3]);
+        StringBuffer buffer = new StringBuffer();
+        List<Dossier> list = null;
         try {
-            dossierService.addDossier(dossier);
+            list = dossierService.getList();
         } catch (ServiceException ex) {
             //TODO
-            response = "Ошибка добавления";
         }
-
+        String response = "Список пуст";
+        if (list != null) {
+            int index = 1;
+            if (list.size() != 0) {
+                for (Dossier item : list) {
+                    buffer.append(index++ + ": " + item.getFirstName() + " " + item.getLastName() +
+                            " " + item.getGroupNumber() + "\r\n");
+                }
+                response = buffer.toString();
+            }
+        } else {
+            response = "Произошла ошибка";
+        }
         return response;
     }
 
@@ -64,12 +75,10 @@ public class AddDossierCommand implements Command {
         return AccessAdmin;
     }
 
-
-    private static final int countParam = 4;
-    private String description = "Adding a dossier: add|firstname|lastname|group number";
-    Boolean AccessSee = false;
-    Boolean AccessWrite = true;
+    private static final int countParam = 1;
+    private String description = "Displaying the list with the dossier: show";
+    Boolean AccessSee = true;
+    Boolean AccessWrite = false;
     Boolean AccessChange = false;
     Boolean AccessAdmin = false;
-
 }

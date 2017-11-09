@@ -1,37 +1,45 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
-import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.Dossier;
 import com.bsuir.archive.server.service.DossierService;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.exception.ServiceException;
 
-public class AddDossierCommand implements Command {
+public class ChangeDossierCommand implements Command {
 
-    public AddDossierCommand() {
+
+    public ChangeDossierCommand() {
 
         ServiceFactory factory = ServiceFactory.getInstance();
         dossierService = factory.getDossierService();
     }
 
     DossierService dossierService;
-
     @Override
     public String execute(String[] param) {
-        String response = "Добавлено";
+        String response = "Изменено";
         Dossier dossier = new Dossier();
+        Dossier newDossier = new Dossier();
         dossier.setFirstName(param[1]);
         dossier.setLastName(param[2]);
         dossier.setGroupNumber(param[3]);
+
+        newDossier.setFirstName(param[4]);
+        newDossier.setLastName(param[5]);
+        newDossier.setGroupNumber(param[6]);
+
+        Boolean result = true;
         try {
-            dossierService.addDossier(dossier);
+            result = dossierService.changeDossier(dossier,newDossier);
         } catch (ServiceException ex) {
             //TODO
-            response = "Ошибка добавления";
+            response = "Ошибка при изменении";
         }
-
-        return response;
+        if (!result){
+            response = "Не удалось изменить";
+        }
+        return  response;
     }
 
     @Override
@@ -65,11 +73,11 @@ public class AddDossierCommand implements Command {
     }
 
 
-    private static final int countParam = 4;
-    private String description = "Adding a dossier: add|firstname|lastname|group number";
+    private static final int countParam = 7;
+    private String description = "Change a dossier: change|old firstname|old lastname|old group number| new firstname|" +
+            "new lastname| new group number";
     Boolean AccessSee = false;
     Boolean AccessWrite = true;
-    Boolean AccessChange = false;
+    Boolean AccessChange = true;
     Boolean AccessAdmin = false;
-
 }

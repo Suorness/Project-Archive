@@ -15,7 +15,7 @@ import java.util.List;
 public class Controller implements Runnable {
 
 
-    private final CommandProvider provider = new CommandProvider();
+    private CommandProvider provider;
 
     private UserService userService;
     private DataTransferService dataTransferService;
@@ -34,6 +34,7 @@ public class Controller implements Runnable {
         dataTransferService = factory.getDataTransferService();
         this.socket = socket;
         userManager = new UserManager();
+        provider = new CommandProvider(userManager);
     }
 
     @Override
@@ -52,14 +53,11 @@ public class Controller implements Runnable {
                 outputStream.writeUTF(line);
                 request = inputStream.readUTF();
                 response = doAction(request);
-                if (response==null){
-                    response = "";
-                }
                 outputStream.writeUTF(response);
                 outputStream.flush();
             }
         } catch (IOException ex) {
-            //throw new ServiceException(ex);
+            //TODO
         }
     }
 
@@ -69,12 +67,15 @@ public class Controller implements Runnable {
     }
 
     String doAction(String request) {
-        String response = null;
-        String commandName;
-        commandName = request.split(" ")[0];
-        Command command = provider.getCommand(commandName);
-        if (command != null) {
-            response =command.execute();
+        String response = "Неверная команда";
+        String[] param = request.split("\\|");
+        Command command = provider.getCommand(param[0]);
+        if ((command != null) && (availabilityCheck(userManager.getUser(),command))){
+            if (command.getCountParam()==param.length){
+                response =command.execute(param);
+            }else{
+                response = "Неверное количество параметров";
+            }
         }
         return response;
     }

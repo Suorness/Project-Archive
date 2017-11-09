@@ -98,6 +98,18 @@ public class DossierServiceImplementation implements DossierService {
             throw new ServiceException(ex);
         }
     }
+
+    @Override
+    public List<Dossier> getList() throws ServiceException {
+        List<Dossier> list = null;
+        try {
+            list = dossierDAO.getList();
+        }catch (DAOException ex){
+            throw new ServiceException(ex);
+        }
+        return list;
+    }
+
     private DossierServiceImplementation(){
         DAOFactory daoFactory = DAOFactory.getInstance();
         dossierDAO = daoFactory.getDossierDAO();
