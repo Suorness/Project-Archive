@@ -6,7 +6,12 @@ public class User {
     private Boolean accessSee;
     private Boolean accessWrite;
     private Boolean accessChange;
-
+    public User(){}
+    public User(Integer id, Boolean accessSee,Boolean accessWrite,Boolean accessChange){
+        this.id = id;
+        this.accessSee = accessSee;
+        this.accessWrite = accessChange;
+    }
     public Integer getId() {
         return id;
     }

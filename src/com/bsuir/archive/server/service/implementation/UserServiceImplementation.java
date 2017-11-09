@@ -35,8 +35,6 @@ public class UserServiceImplementation implements UserService {
         return result;
     }
 
-
-
     public  User findUser(User user) throws ServiceException {
 
         List<User> list;

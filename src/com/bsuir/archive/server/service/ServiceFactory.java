@@ -1,5 +1,6 @@
 package com.bsuir.archive.server.service;
 
+import com.bsuir.archive.server.service.implementation.DataTransferServiceImplementation;
 import com.bsuir.archive.server.service.implementation.DossierServiceImplementation;
 import com.bsuir.archive.server.service.implementation.UserServiceImplementation;
 
@@ -7,7 +8,11 @@ public class ServiceFactory {
     private static ServiceFactory ourInstance = new ServiceFactory();
     private DossierService dossierService = DossierServiceImplementation.getInstance();
     private UserService userService = UserServiceImplementation.getInstance();
+    private DataTransferService dataTransferService = DataTransferServiceImplementation.getDataTransferService();
 
+    public DataTransferService getDataTransferService() {
+        return dataTransferService;
+    }
     public DossierService getDossierService(){
         return dossierService;
     }
