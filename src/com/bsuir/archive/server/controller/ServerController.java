@@ -11,11 +11,11 @@ public class ServerController {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             while(!serverSocket.isClosed()) {
-                System.out.println("Ожидание подключения");
+                System.out.println("Waiting for connection");
                 Socket socket = serverSocket.accept();
-                Thread thread =  new Thread(new Controller(socket));
+                Thread thread =  new Thread(new ThreadController(socket));
                 thread.start();
-                System.out.println("Клиент подключен");
+                System.out.println("Client connected");
             }
 
         }catch (IOException ex){

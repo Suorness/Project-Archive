@@ -8,9 +8,10 @@ import java.util.Scanner;
 
 public class FileWriters implements WriterFile {
 
-    private  static FileWriters insnace = new FileWriters();
-    public static FileWriters getInstance(){
-        return  insnace;
+    private static FileWriters insnace = new FileWriters();
+
+    public static FileWriters getInstance() {
+        return insnace;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class FileWriters implements WriterFile {
     }
 
     @Override
-    public String readData(String path) throws FileWriterException{
+    public String readData(String path) throws FileWriterException {
         StringBuffer data = new StringBuffer();
         try (Scanner in = new Scanner(new File(path))) {
             while (in.hasNextLine()) {

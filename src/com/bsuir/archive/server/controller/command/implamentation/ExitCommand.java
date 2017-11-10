@@ -5,7 +5,7 @@ import com.bsuir.archive.server.controller.command.Command;
 public class ExitCommand implements Command {
     @Override
     public String execute(String[] param) {
-        return "Завершено";
+        return "Exit";
     }
 
     @Override

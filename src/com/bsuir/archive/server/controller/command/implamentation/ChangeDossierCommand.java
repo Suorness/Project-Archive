@@ -16,9 +16,10 @@ public class ChangeDossierCommand implements Command {
     }
 
     DossierService dossierService;
+
     @Override
     public String execute(String[] param) {
-        String response = "Изменено";
+        String response = "Changed";
         Dossier dossier = new Dossier();
         Dossier newDossier = new Dossier();
         dossier.setFirstName(param[1]);
@@ -31,15 +32,15 @@ public class ChangeDossierCommand implements Command {
 
         Boolean result = true;
         try {
-            result = dossierService.changeDossier(dossier,newDossier);
+            result = dossierService.changeDossier(dossier, newDossier);
         } catch (ServiceException ex) {
-            //TODO
-            response = "Ошибка при изменении";
+            result = false;
+            response = "Error";
         }
-        if (!result){
-            response = "Не удалось изменить";
+        if (!result) {
+            response = "Unable to change";
         }
-        return  response;
+        return response;
     }
 
     @Override

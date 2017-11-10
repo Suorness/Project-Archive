@@ -5,7 +5,6 @@ import com.bsuir.archive.server.domain.Dossier;
 import com.bsuir.archive.server.service.DossierService;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.exception.ServiceException;
-import sun.invoke.empty.Empty;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class GetAllDossierCommand implements Command {
         } catch (ServiceException ex) {
             //TODO
         }
-        String response = "Список пуст";
+        String response = "List is empty";
         if (list != null) {
             int index = 1;
             if (list.size() != 0) {
@@ -40,7 +39,7 @@ public class GetAllDossierCommand implements Command {
                 response = buffer.toString();
             }
         } else {
-            response = "Произошла ошибка";
+            response = "Error";
         }
         return response;
     }

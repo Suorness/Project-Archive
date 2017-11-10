@@ -8,23 +8,23 @@ import com.bsuir.archive.server.auxiliary.writer.exception.FileWriterException;
 import com.bsuir.archive.server.auxiliary.writer.implamentation.FileWriters;
 import com.bsuir.archive.server.dao.UserDAO;
 import com.bsuir.archive.server.dao.exception.DAOException;
-import com.bsuir.archive.server.domain.Dossier;
 import com.bsuir.archive.server.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class XMLUserDAO implements UserDAO {
-    private static final String PATH = System.getProperty("user.dir")+ "/user.xml";
+    private static final String PATH = System.getProperty("user.dir") + "/user.xml";
     private static XMLUserDAO instance = new XMLUserDAO();
     private final static Object lock = new Object();
     private WriterFile writer;
     private XMLParsers parser;
-    public static XMLUserDAO getInstance(){
-        return  instance;
+
+    public static XMLUserDAO getInstance() {
+        return instance;
     }
 
-    private XMLUserDAO(){
+    private XMLUserDAO() {
         writer = FileWriters.getInstance();
         parser = XMLParser.getInstance();
     }
@@ -59,24 +59,23 @@ public class XMLUserDAO implements UserDAO {
         }
     }
 
-    private String stringFormation (List<User> list) throws DAOException{
+    private String stringFormation(List<User> list) throws DAOException {
         String dataToSave;
         User classEx = new User();
-        try{
-            dataToSave = parser.dataToXML(classEx.getClass(),list);
-        }catch ( ParserException ex){
-            throw new DAOException("Error parsing at file",ex);
+        try {
+            dataToSave = parser.dataToXML(classEx.getClass(), list);
+        } catch (ParserException ex) {
+            throw new DAOException("Error parsing at file", ex);
         }
-        return  dataToSave;
+        return dataToSave;
     }
 
-    private  List<User> listFormation (String savedData) throws DAOException{
+    private List<User> listFormation(String savedData) throws DAOException {
         List<User> list;
         User classEx = new User();
-        if ((savedData.isEmpty()) || (savedData == null)){
+        if ((savedData.isEmpty()) || (savedData == null)) {
             list = new ArrayList<User>();
-        }
-        else {
+        } else {
             try {
                 list = parser.XMLToData(savedData, classEx);
             } catch (ParserException ex) {

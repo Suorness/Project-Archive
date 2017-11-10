@@ -11,7 +11,7 @@ public class CommandProvider {
     private Map<String, Command> commands = new HashMap<>();
 
     public CommandProvider(UserManager manager) {
-        commands.put("add",new AddDossierCommand());
+        commands.put("add", new AddDossierCommand());
         commands.put("signin", new AuthorizationCommand(manager));
         commands.put("logout", new LogOutCommand(manager));
         commands.put("show", new GetAllDossierCommand());

@@ -16,12 +16,13 @@ public class LogOutCommand implements Command {
         ServiceFactory factory = ServiceFactory.getInstance();
         userService = factory.getUserService();
     }
+
     @Override
     public String execute(String[] param) {
         String response = "";
 
         manager.logOut();
-        response = "Операция прошла успешно";
+        response = "Operation was successfully completed";
 
         return response;
     }

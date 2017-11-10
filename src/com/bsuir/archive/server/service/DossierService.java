@@ -7,8 +7,12 @@ import java.util.List;
 
 public interface DossierService {
     boolean addDossier(Dossier dossier) throws ServiceException;
+
     boolean delDossier(Dossier dossier) throws ServiceException;
-    boolean changeDossier(Dossier dossier,Dossier newDossier) throws ServiceException;
+
+    boolean changeDossier(Dossier dossier, Dossier newDossier) throws ServiceException;
+
     void clear() throws ServiceException;
-    List<Dossier> getList() throws  ServiceException;
+
+    List<Dossier> getList() throws ServiceException;
 }

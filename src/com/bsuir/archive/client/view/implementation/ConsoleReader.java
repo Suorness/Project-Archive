@@ -22,14 +22,15 @@ public class ConsoleReader implements Reader {
         String str = in.nextLine().trim();
         try {
             result = Integer.parseInt(str);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             result = -1;
         }
         return result;
     }
 
-    public ConsoleReader(){
+    public ConsoleReader() {
         in = new Scanner(System.in);
     }
+
     private Scanner in;
 }

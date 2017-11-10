@@ -4,7 +4,7 @@ import com.bsuir.archive.server.domain.User;
 
 public class UserManager {
 
-    public UserManager(){
+    public UserManager() {
         this.user = startUser;
     }
 
@@ -15,9 +15,11 @@ public class UserManager {
     public void setUser(User user) {
         this.user = user;
     }
-    public void logOut(){
+
+    public void logOut() {
         user = startUser;
     }
+
     private User user;
-    private User startUser = new User("login","pas",false,false,false,false);
+    private User startUser = new User("login", "pas", false, false, false, false);
 }

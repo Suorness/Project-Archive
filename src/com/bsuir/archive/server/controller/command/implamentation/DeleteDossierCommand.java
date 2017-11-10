@@ -15,9 +15,10 @@ public class DeleteDossierCommand implements Command {
     }
 
     DossierService dossierService;
+
     @Override
     public String execute(String[] param) {
-        String response = "Удалено";
+        String response = "Deleted";
         Dossier dossier = new Dossier();
         dossier.setFirstName(param[1]);
         dossier.setLastName(param[2]);
@@ -26,11 +27,11 @@ public class DeleteDossierCommand implements Command {
         try {
             result = dossierService.delDossier(dossier);
         } catch (ServiceException ex) {
-            //TODO
-            response = "Ошибка добавления";
+            response = "Error";
+            return response;
         }
-        if (!result){
-            response = "Не удалось удалить";
+        if (!result) {
+            response = "Failed to delete";
         }
         return response;
     }

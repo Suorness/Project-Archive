@@ -15,81 +15,82 @@ import java.util.List;
 
 public class UserServiceImplementation implements UserService {
 
-    public static UserServiceImplementation getInstance(){
+    public static UserServiceImplementation getInstance() {
         return instance;
     }
 
     @Override
     public boolean addUser(User user) throws ServiceException {
         Boolean result = true;
-        if ( (user!=null) && (findUser(user)==null)) {
+        if ((user != null) && (findUser(user) == null)) {
             user.setHash(getHash(user.getHash()));
             List<User> list;
             try {
                 list = userDAO.getList();
                 list.add(user);
                 userDAO.setList(list);
-            }catch (DAOException ex){
-                throw  new ServiceException(ex);
+            } catch (DAOException ex) {
+                throw new ServiceException(ex);
             }
-        }
-        else{
+        } else {
             result = false;
         }
         return result;
     }
 
-    public  User findUser(User user) throws ServiceException {
+    public User findUser(User user) throws ServiceException {
 
         List<User> list;
         try {
             list = userDAO.getList();
-        }catch (DAOException ex){
-            throw  new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
         }
 
         User detectedUser = null;
-        for (User item: list) {
-            if (item.equals(user)){
+        for (User item : list) {
+            if (item.equals(user)) {
                 detectedUser = item;
             }
         }
         return detectedUser;
     }
-    public  User findUser(String login) throws ServiceException {
+
+    public User findUser(String login) throws ServiceException {
 
         List<User> list;
         try {
             list = userDAO.getList();
-        }catch (DAOException ex){
-            throw  new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
         }
 
         User detectedUser = null;
-        for (User item: list) {
-            if (item.getLogin().equals(login)){
+        for (User item : list) {
+            if (item.getLogin().equals(login)) {
                 detectedUser = item;
             }
         }
         return detectedUser;
     }
+
     @Override
     public boolean delUser(String login) throws ServiceException {
         boolean result = false;
         List<User> list;
         try {
             list = userDAO.getList();
-        }catch (DAOException ex){
-            throw  new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
         }
         User forDel = findUser(login);
-        if (forDel!=null){
+        if (forDel != null) {
             result = true;
             list.remove(forDel);
             try {
                 userDAO.setList(list);
-            }catch (DAOException ex){
-                throw  new ServiceException(ex);
+            } catch (DAOException ex) {
+                throw new ServiceException(ex);
             }
         }
         return result;
@@ -101,30 +102,30 @@ public class UserServiceImplementation implements UserService {
         List<User> list;
         try {
             list = userDAO.getList();
-        }catch (DAOException ex){
-            throw  new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
         }
         User forChange = findUser(user);
-        if (forChange!=null){
+        if (forChange != null) {
             result = true;
             list.remove(forChange);
             list.add(newUser);
             try {
                 userDAO.setList(list);
-            }catch (DAOException ex){
-                throw  new ServiceException(ex);
+            } catch (DAOException ex) {
+                throw new ServiceException(ex);
             }
         }
-        return  result;
+        return result;
     }
 
     @Override
     public void clear() throws ServiceException {
-                List<User> list = new ArrayList<User>();
+        List<User> list = new ArrayList<User>();
         try {
             userDAO.setList(list);
-        }catch (DAOException ex){
-            throw  new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
         }
     }
 
@@ -133,28 +134,29 @@ public class UserServiceImplementation implements UserService {
         List<User> list;
         try {
             list = userDAO.getList();
-        }catch (DAOException ex){
-            throw  new ServiceException(ex);
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
         }
 
         User detectedUser = null;
-        for (User item: list) {
-            if ((item.getLogin().equals(login)) && (item.getHash().equals(getHash(password)))){
+        for (User item : list) {
+            if ((item.getLogin().equals(login)) && (item.getHash().equals(getHash(password)))) {
                 detectedUser = item;
             }
         }
         return detectedUser;
     }
 
-    private UserServiceImplementation(){
+    private UserServiceImplementation() {
         DAOFactory daoFactory = DAOFactory.getInstance();
         userDAO = daoFactory.getUserDAO();
     }
+
     private String getHash(String str) throws ServiceException {
         MessageDigest md = null;
-        String hash="";
+        String hash = "";
         try {
-            md = MessageDigest.getInstance ("MD5");
+            md = MessageDigest.getInstance("MD5");
             md.update(str.getBytes());
             hash = DatatypeConverter.printHexBinary(md.digest()).toUpperCase();
         } catch (NoSuchAlgorithmException e) {

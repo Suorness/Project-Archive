@@ -27,8 +27,8 @@ public class Controller {
     public void Start() {
         try {
             connection();
-        }catch (Exception ex){
-            view.showErrorInfo("Не удалось подключиться к серверу ");
+        } catch (Exception ex) {
+            view.showErrorInfo("Could not connect to the server");
         }
     }
 
@@ -45,13 +45,13 @@ public class Controller {
             String line = null;
             while (working) {
                 line = in.readUTF();
-                view.outputLine("Сервер:\r\n" + line);
+                view.outputLine("Server:\r\n" + line);
                 line = reader.dataInputString();
                 if (!checkCompletion(line)) {
                     out.writeUTF(line);
                     out.flush();
                     line = in.readUTF();
-                    view.outputLine("Сервер:\r\n" + line);
+                    view.outputLine("Server:\r\n" + line);
                 } else {
                     working = false;
                 }

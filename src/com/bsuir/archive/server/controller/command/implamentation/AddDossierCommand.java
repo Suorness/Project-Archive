@@ -1,6 +1,5 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
-import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.Dossier;
 import com.bsuir.archive.server.service.DossierService;
@@ -19,7 +18,7 @@ public class AddDossierCommand implements Command {
 
     @Override
     public String execute(String[] param) {
-        String response = "Добавлено";
+        String response = "Dossier added";
         Dossier dossier = new Dossier();
         dossier.setFirstName(param[1]);
         dossier.setLastName(param[2]);
@@ -27,8 +26,7 @@ public class AddDossierCommand implements Command {
         try {
             dossierService.addDossier(dossier);
         } catch (ServiceException ex) {
-            //TODO
-            response = "Ошибка добавления";
+            response = "Error adding";
         }
 
         return response;

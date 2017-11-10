@@ -13,21 +13,23 @@ import com.bsuir.archive.server.domain.Dossier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XMLDossierDAO implements DossierDAO{
+public class XMLDossierDAO implements DossierDAO {
 
     private static XMLDossierDAO instance = new XMLDossierDAO();
     private WriterFile writer;
     private XMLParsers parser;
-    private static final String PATH = System.getProperty("user.dir")+ "/dossier.xml";
+    private static final String PATH = System.getProperty("user.dir") + "/dossier.xml";
     private final static Object lock = new Object();
 
     public static XMLDossierDAO getInstance() {
         return instance;
     }
-    private XMLDossierDAO(){
+
+    private XMLDossierDAO() {
         writer = FileWriters.getInstance();
         parser = XMLParser.getInstance();
     }
+
     @Override
     public List<Dossier> getList() throws DAOException {
         synchronized (lock) {
@@ -58,25 +60,24 @@ public class XMLDossierDAO implements DossierDAO{
         }
     }
 
-    private String stringFormation (List<Dossier> list) throws DAOException{
+    private String stringFormation(List<Dossier> list) throws DAOException {
         String dataToSave;
         Dossier classEx = new Dossier();
-        try{
-            dataToSave = parser.dataToXML(classEx.getClass(),list);
-        }catch ( ParserException ex){
-            throw new DAOException("Error parsing at file",ex);
+        try {
+            dataToSave = parser.dataToXML(classEx.getClass(), list);
+        } catch (ParserException ex) {
+            throw new DAOException("Error parsing at file", ex);
         }
-        return  dataToSave;
+        return dataToSave;
     }
 
-    private  List<Dossier> listFormation (String savedData) throws DAOException{
+    private List<Dossier> listFormation(String savedData) throws DAOException {
         String dataToSave;
         List<Dossier> list;
         Dossier classEx = new Dossier();
-        if ((savedData.isEmpty()) || (savedData == null)){
+        if ((savedData.isEmpty()) || (savedData == null)) {
             list = new ArrayList<Dossier>();
-        }
-        else {
+        } else {
             try {
                 list = parser.XMLToData(savedData, classEx);
             } catch (ParserException ex) {

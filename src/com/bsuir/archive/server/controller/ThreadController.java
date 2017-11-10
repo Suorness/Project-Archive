@@ -3,7 +3,6 @@ package com.bsuir.archive.server.controller;
 import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.User;
-import com.bsuir.archive.server.service.DataTransferService;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.UserService;
 
@@ -12,13 +11,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller implements Runnable {
+public class ThreadController implements Runnable {
 
 
     private CommandProvider provider;
 
     private UserService userService;
-    private DataTransferService dataTransferService;
+
     private boolean working;
     private Socket socket;
     private UserManager userManager;
@@ -28,10 +27,9 @@ public class Controller implements Runnable {
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
 
-    public Controller(Socket socket) {
+    public ThreadController(Socket socket) {
         ServiceFactory factory = ServiceFactory.getInstance();
         userService = factory.getUserService();
-        dataTransferService = factory.getDataTransferService();
         this.socket = socket;
         userManager = new UserManager();
         provider = new CommandProvider(userManager);
@@ -67,14 +65,14 @@ public class Controller implements Runnable {
     }
 
     String doAction(String request) {
-        String response = "Неверная команда";
+        String response = "Invalid command";
         String[] param = request.split("\\|");
         Command command = provider.getCommand(param[0]);
-        if ((command != null) && (availabilityCheck(userManager.getUser(),command))){
-            if (command.getCountParam()==param.length){
-                response =command.execute(param);
-            }else{
-                response = "Неверное количество параметров";
+        if ((command != null) && (availabilityCheck(userManager.getUser(), command))) {
+            if (command.getCountParam() == param.length) {
+                response = command.execute(param);
+            } else {
+                response = "Wrong number of parameters";
             }
         }
         return response;
@@ -97,17 +95,19 @@ public class Controller implements Runnable {
                 result = false;
             }
         }
-        if (command.isAccessAdmin()){
-            //if (!user.is)
+        if (command.isAccessAdmin()) {
+            if (!user.getAccessAdmin()){
+                result = false;
+            }
         }
         return result;
     }
 
-    String formationCommandList(){
+    String formationCommandList() {
         List<Command> list = new ArrayList<Command>(provider.getCommands().values());
         StringBuffer buffer = new StringBuffer();
-        for (Command command:list) {
-            if (availabilityCheck(userManager.getUser(),command)) {
+        for (Command command : list) {
+            if (availabilityCheck(userManager.getUser(), command)) {
                 buffer.append(command.getDescriptionCommand() + "\r\n");
             }
         }

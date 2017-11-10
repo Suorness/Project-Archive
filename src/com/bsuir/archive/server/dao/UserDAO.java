@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserDAO {
     List<User> getList() throws DAOException;
+
     void setList(List<User> list) throws DAOException;
 
 }

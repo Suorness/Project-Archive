@@ -1,6 +1,5 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
-import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.User;
 import com.bsuir.archive.server.service.ServiceFactory;
@@ -19,31 +18,32 @@ public class AddUserCommand implements Command {
 
     @Override
     public String execute(String[] param) {
-        String response = "Пользователь создан";
+        String response = "User has been added.";
         Boolean result = true;
-        User user = new User(param[1],param[2],parseBool(param[3]),parseBool(param[4]),parseBool(param[5]),parseBool(param[6]));
+        User user = new User(param[1], param[2], parseBool(param[3]), parseBool(param[4]), parseBool(param[5]), parseBool(param[6]));
         try {
             result = userService.addUser(user);
-        }catch (ServiceException ex){
-                //TODO
-            response = "Произошла ошибка";
+        } catch (ServiceException ex) {
+            //TODO
+            response = "Error";
             result = false;
         }
-        if (!result){
-            response = "Пользователь не добавлен";
+        if (!result) {
+            response = "User was not added";
         }
         return response;
     }
 
-    Boolean parseBool(String str){
+    Boolean parseBool(String str) {
         Boolean result;
-        try{
+        try {
             result = Boolean.parseBoolean(str);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             result = false;
         }
         return result;
     }
+
     @Override
     public Boolean isAccessSee() {
         return AccessSee;

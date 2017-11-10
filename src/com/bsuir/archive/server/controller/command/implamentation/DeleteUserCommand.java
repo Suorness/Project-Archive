@@ -1,7 +1,6 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
 import com.bsuir.archive.server.controller.command.Command;
-import com.bsuir.archive.server.domain.User;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.UserService;
 import com.bsuir.archive.server.service.exception.ServiceException;
@@ -17,17 +16,16 @@ public class DeleteUserCommand implements Command {
 
     @Override
     public String execute(String[] param) {
-        String response = "Пользователь удален";
+        String response = "User deleted";
         Boolean result = true;
         try {
             result = userService.delUser(param[1]);
         } catch (ServiceException ex) {
-            //TODO
-            response = "Произошла ошибка";
-            result = false;
+            response = "Error";
+            return response;
         }
         if (!result) {
-            response = "Пользователь не удален";
+            response = "User was not deleted";
         }
         return response;
     }

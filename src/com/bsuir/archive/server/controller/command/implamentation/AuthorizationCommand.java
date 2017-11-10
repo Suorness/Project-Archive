@@ -23,16 +23,16 @@ public class AuthorizationCommand implements Command {
         String response = "";
         User user = null;
         try {
-            user = userService.findUser(param[1],param[2]);
+            user = userService.findUser(param[1], param[2]);
         } catch (ServiceException ex) {
-            //TODO правка
-            System.out.println(ex.getMessage());
+            response = "Error";
+            return response;
         }
         if (user != null) {
             manager.setUser(user);
-            response = "Авторизован";
+            response = "Authorized";
         } else {
-            response = "Пользователь не найдет";
+            response = "User will not find";
         }
         return response;
     }
