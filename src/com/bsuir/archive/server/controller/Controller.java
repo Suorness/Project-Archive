@@ -97,6 +97,9 @@ public class Controller implements Runnable {
                 result = false;
             }
         }
+        if (command.isAccessAdmin()){
+            //if (!user.is)
+        }
         return result;
     }
 

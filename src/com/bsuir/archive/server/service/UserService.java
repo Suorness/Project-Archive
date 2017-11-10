@@ -6,8 +6,8 @@ import com.bsuir.archive.server.service.exception.ServiceException;
 public interface UserService {
 
     boolean addUser(User user) throws ServiceException;
-    boolean delUser(User user) throws ServiceException;
+    boolean delUser(String login) throws ServiceException;
     boolean changeUser(User user, User newUser) throws ServiceException;
     void clear() throws ServiceException;
-    User findUser(int id) throws ServiceException;
+    User findUser(String login, String password) throws ServiceException;
 }

@@ -7,6 +7,9 @@ import com.bsuir.archive.server.domain.User;
 import com.bsuir.archive.server.service.UserService;
 import com.bsuir.archive.server.service.exception.ServiceException;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class UserServiceImplementation implements UserService {
     public boolean addUser(User user) throws ServiceException {
         Boolean result = true;
         if ( (user!=null) && (findUser(user)==null)) {
+            user.setHash(getHash(user.getHash()));
             List<User> list;
             try {
                 list = userDAO.getList();
@@ -52,10 +56,8 @@ public class UserServiceImplementation implements UserService {
         }
         return detectedUser;
     }
+    public  User findUser(String login) throws ServiceException {
 
-    @Override
-    public boolean delUser(User user) throws ServiceException {
-        boolean result = false;
         List<User> list;
         try {
             list = userDAO.getList();
@@ -63,7 +65,24 @@ public class UserServiceImplementation implements UserService {
             throw  new ServiceException(ex);
         }
 
-        User forDel = findUser(user);
+        User detectedUser = null;
+        for (User item: list) {
+            if (item.getLogin().equals(login)){
+                detectedUser = item;
+            }
+        }
+        return detectedUser;
+    }
+    @Override
+    public boolean delUser(String login) throws ServiceException {
+        boolean result = false;
+        List<User> list;
+        try {
+            list = userDAO.getList();
+        }catch (DAOException ex){
+            throw  new ServiceException(ex);
+        }
+        User forDel = findUser(login);
         if (forDel!=null){
             result = true;
             list.remove(forDel);
@@ -110,7 +129,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User findUser(int id) throws ServiceException {
+    public User findUser(String login, String password) throws ServiceException {
         List<User> list;
         try {
             list = userDAO.getList();
@@ -120,7 +139,7 @@ public class UserServiceImplementation implements UserService {
 
         User detectedUser = null;
         for (User item: list) {
-            if (item.getId().equals(id)){
+            if ((item.getLogin().equals(login)) && (item.getHash().equals(getHash(password)))){
                 detectedUser = item;
             }
         }
@@ -131,6 +150,19 @@ public class UserServiceImplementation implements UserService {
         DAOFactory daoFactory = DAOFactory.getInstance();
         userDAO = daoFactory.getUserDAO();
     }
+    private String getHash(String str) throws ServiceException {
+        MessageDigest md = null;
+        String hash="";
+        try {
+            md = MessageDigest.getInstance ("MD5");
+            md.update(str.getBytes());
+            hash = DatatypeConverter.printHexBinary(md.digest()).toUpperCase();
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException(e);
+        }
+        return hash;
+    }
+
     UserDAO userDAO;
     private static UserServiceImplementation instance = new UserServiceImplementation();
 }

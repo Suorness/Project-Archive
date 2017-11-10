@@ -1,50 +1,35 @@
 package com.bsuir.archive.server.controller.command.implamentation;
 
-import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.User;
 import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.UserService;
 import com.bsuir.archive.server.service.exception.ServiceException;
 
-public class AuthorizationCommand implements Command {
+public class DeleteUserCommand implements Command {
 
-    UserManager manager;
     UserService userService;
 
-    public AuthorizationCommand(UserManager userManager) {
-        manager = userManager;
+    public DeleteUserCommand() {
         ServiceFactory factory = ServiceFactory.getInstance();
         userService = factory.getUserService();
     }
 
     @Override
     public String execute(String[] param) {
-        String response = "";
-        User user = null;
+        String response = "Пользователь удален";
+        Boolean result = true;
         try {
-            user = userService.findUser(param[1],param[2]);
+            result = userService.delUser(param[1]);
         } catch (ServiceException ex) {
-            //TODO правка
-            System.out.println(ex.getMessage());
+            //TODO
+            response = "Произошла ошибка";
+            result = false;
         }
-        if (user != null) {
-            manager.setUser(user);
-            response = "Авторизован";
-        } else {
-            response = "Пользователь не найдет";
+        if (!result) {
+            response = "Пользователь не удален";
         }
         return response;
-    }
-
-    private int parseToInt(String str) {
-        int result;
-        try {
-            result = Integer.parseInt(str);
-        } catch (Exception ex) {
-            result = -1;
-        }
-        return result;
     }
 
     @Override
@@ -77,10 +62,11 @@ public class AuthorizationCommand implements Command {
         return AccessAdmin;
     }
 
-    private String description = "Authorization: signin|login|password";
-    private static final int countParam = 3;
+
+    private static final int countParam = 2;
+    private String description = "Delete a user: deleteuser|login";
     Boolean AccessSee = false;
-    Boolean AccessWrite = false;
-    Boolean AccessChange = false;
-    Boolean AccessAdmin = false;
+    Boolean AccessWrite = true;
+    Boolean AccessChange = true;
+    Boolean AccessAdmin = true;
 }

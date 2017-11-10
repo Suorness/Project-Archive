@@ -7,46 +7,43 @@ import com.bsuir.archive.server.service.ServiceFactory;
 import com.bsuir.archive.server.service.UserService;
 import com.bsuir.archive.server.service.exception.ServiceException;
 
-public class AuthorizationCommand implements Command {
+public class AddUserCommand implements Command {
 
-    UserManager manager;
+
     UserService userService;
 
-    public AuthorizationCommand(UserManager userManager) {
-        manager = userManager;
+    public AddUserCommand() {
         ServiceFactory factory = ServiceFactory.getInstance();
         userService = factory.getUserService();
     }
 
     @Override
     public String execute(String[] param) {
-        String response = "";
-        User user = null;
+        String response = "Пользователь создан";
+        Boolean result = true;
+        User user = new User(param[1],param[2],parseBool(param[3]),parseBool(param[4]),parseBool(param[5]),parseBool(param[6]));
         try {
-            user = userService.findUser(param[1],param[2]);
-        } catch (ServiceException ex) {
-            //TODO правка
-            System.out.println(ex.getMessage());
+            result = userService.addUser(user);
+        }catch (ServiceException ex){
+                //TODO
+            response = "Произошла ошибка";
+            result = false;
         }
-        if (user != null) {
-            manager.setUser(user);
-            response = "Авторизован";
-        } else {
-            response = "Пользователь не найдет";
+        if (!result){
+            response = "Пользователь не добавлен";
         }
         return response;
     }
 
-    private int parseToInt(String str) {
-        int result;
-        try {
-            result = Integer.parseInt(str);
-        } catch (Exception ex) {
-            result = -1;
+    Boolean parseBool(String str){
+        Boolean result;
+        try{
+            result = Boolean.parseBoolean(str);
+        }catch (Exception ex){
+            result = false;
         }
         return result;
     }
-
     @Override
     public Boolean isAccessSee() {
         return AccessSee;
@@ -77,10 +74,11 @@ public class AuthorizationCommand implements Command {
         return AccessAdmin;
     }
 
-    private String description = "Authorization: signin|login|password";
-    private static final int countParam = 3;
+
+    private static final int countParam = 7;
+    private String description = "Adding a user: adduser|login|password|accsessSee|accessWrite|accessChane|accessAdmin";
     Boolean AccessSee = false;
-    Boolean AccessWrite = false;
-    Boolean AccessChange = false;
-    Boolean AccessAdmin = false;
+    Boolean AccessWrite = true;
+    Boolean AccessChange = true;
+    Boolean AccessAdmin = true;
 }

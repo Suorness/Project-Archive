@@ -18,6 +18,8 @@ public class CommandProvider {
         commands.put("delete", new DeleteDossierCommand());
         commands.put("change", new ChangeDossierCommand());
         commands.put("exit", new ExitCommand());
+        commands.put("adduser", new AddUserCommand());
+        commands.put("deleteuser", new DeleteUserCommand());
     }
 
 

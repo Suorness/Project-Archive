@@ -19,5 +19,5 @@ public class UserManager {
         user = startUser;
     }
     private User user;
-    private User startUser = new User(0,false,false,false);
+    private User startUser = new User("login","pas",false,false,false,false);
 }

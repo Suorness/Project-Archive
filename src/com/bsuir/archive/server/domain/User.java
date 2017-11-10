@@ -1,25 +1,41 @@
 package com.bsuir.archive.server.domain;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class User {
 
-    private Integer id;
+    private String login;
+
+    public String getLogin() {
+        return login;
+    }
+
+    private String hash;
+
     private Boolean accessSee;
     private Boolean accessWrite;
     private Boolean accessChange;
+
+
+    private Boolean accessAdmin;
     public User(){}
-    public User(Integer id, Boolean accessSee,Boolean accessWrite,Boolean accessChange){
-        this.id = id;
+    public User(String login,String hash, Boolean accessSee,Boolean accessWrite,Boolean accessChange,Boolean accessAdmin){
+        this.login = login;
+        this.hash = hash;
         this.accessSee = accessSee;
         this.accessWrite = accessWrite;
         this.accessChange = accessChange;
+        this.accessAdmin = accessAdmin;
     }
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
 
     public Boolean isAccessSee() {
         return accessSee;
@@ -45,13 +61,35 @@ public class User {
         this.accessChange = accessChange;
     }
 
+    public Boolean getAccessAdmin() {
+        return accessAdmin;
+    }
+
+    public void setAccessAdmin(Boolean accessAdmin) {
+        this.accessAdmin = accessAdmin;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+
     @Override
     public int hashCode() {
         int result = 17;
         final int prime = 31;
-        result = prime * result + id;
+        result = prime * result + login.hashCode() + hash.hashCode();
         return result;
     }
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -63,9 +101,20 @@ public class User {
             return false;
         }
         User userOnCheck = (User) obj;
-        if ( !(id==userOnCheck.id)){
+        if (login == null) {
+            if (userOnCheck.login != null) {
+                return false;
+            }
+        } else if (!login.equals(userOnCheck.login)) {
             return false;
         }
+//        if (hash == null) {
+//            if (userOnCheck.hash != null) {
+//                return false;
+//            }
+//        } else if (!hash.equals(userOnCheck.hash)) {
+//            return false;
+//        }
         if (!(accessSee==userOnCheck.accessSee)) {
             return false;
         }
