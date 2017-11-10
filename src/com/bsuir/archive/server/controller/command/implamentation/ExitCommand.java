@@ -10,17 +10,17 @@ public class ExitCommand implements Command {
 
     @Override
     public Boolean isAccessSee() {
-        return AccessSee;
+        return accessSee;
     }
 
     @Override
     public Boolean isAccessWrite() {
-        return AccessWrite;
+        return accessWrite;
     }
 
     @Override
     public Boolean isAccessChange() {
-        return AccessChange;
+        return accessChange;
     }
 
     @Override
@@ -35,14 +35,14 @@ public class ExitCommand implements Command {
 
     @Override
     public Boolean isAccessAdmin() {
-        return AccessAdmin;
+        return accessAdmin;
     }
 
 
     private static final int countParam = 1;
     private String description = "Exiting the program: exit";
-    Boolean AccessSee = false;
-    Boolean AccessWrite = false;
-    Boolean AccessChange = false;
-    Boolean AccessAdmin = false;
+    Boolean accessSee = false;
+    Boolean accessWrite = false;
+    Boolean accessChange = false;
+    Boolean accessAdmin = false;
 }

@@ -45,17 +45,17 @@ public class ChangeDossierCommand implements Command {
 
     @Override
     public Boolean isAccessSee() {
-        return AccessSee;
+        return accessSee;
     }
 
     @Override
     public Boolean isAccessWrite() {
-        return AccessWrite;
+        return accessWrite;
     }
 
     @Override
     public Boolean isAccessChange() {
-        return AccessChange;
+        return accessChange;
     }
 
     @Override
@@ -70,15 +70,15 @@ public class ChangeDossierCommand implements Command {
 
     @Override
     public Boolean isAccessAdmin() {
-        return AccessAdmin;
+        return accessAdmin;
     }
 
 
     private static final int countParam = 7;
     private String description = "Change a dossier: change|old firstname|old lastname|old group number| new firstname|" +
             "new lastname| new group number";
-    Boolean AccessSee = false;
-    Boolean AccessWrite = true;
-    Boolean AccessChange = true;
-    Boolean AccessAdmin = false;
+    Boolean accessSee = false;
+    Boolean accessWrite = true;
+    Boolean accessChange = true;
+    Boolean accessAdmin = false;
 }

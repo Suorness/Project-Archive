@@ -3,8 +3,6 @@ package com.bsuir.archive.server.controller;
 import com.bsuir.archive.server.auxiliary.manager.UserManager;
 import com.bsuir.archive.server.controller.command.Command;
 import com.bsuir.archive.server.domain.User;
-import com.bsuir.archive.server.service.ServiceFactory;
-import com.bsuir.archive.server.service.UserService;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,9 +14,7 @@ public class ThreadController implements Runnable {
 
     private CommandProvider provider;
 
-    private UserService userService;
 
-    private boolean working;
     private Socket socket;
     private UserManager userManager;
 
@@ -28,8 +24,6 @@ public class ThreadController implements Runnable {
     private DataOutputStream outputStream;
 
     public ThreadController(Socket socket) {
-        ServiceFactory factory = ServiceFactory.getInstance();
-        userService = factory.getUserService();
         this.socket = socket;
         userManager = new UserManager();
         provider = new CommandProvider(userManager);
@@ -55,14 +49,10 @@ public class ThreadController implements Runnable {
                 outputStream.flush();
             }
         } catch (IOException ex) {
-            //TODO
+            showError(ex.getMessage());
         }
     }
 
-    void Start() {
-        working = true;
-
-    }
 
     String doAction(String request) {
         String response = "Invalid command";
@@ -96,7 +86,7 @@ public class ThreadController implements Runnable {
             }
         }
         if (command.isAccessAdmin()) {
-            if (!user.getAccessAdmin()){
+            if (!user.getAccessAdmin()) {
                 result = false;
             }
         }
@@ -114,4 +104,7 @@ public class ThreadController implements Runnable {
         return buffer.toString();
     }
 
+    void showError(String str) {
+        System.out.println(str);
+    }
 }

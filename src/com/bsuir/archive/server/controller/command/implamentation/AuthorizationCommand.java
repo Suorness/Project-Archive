@@ -49,17 +49,17 @@ public class AuthorizationCommand implements Command {
 
     @Override
     public Boolean isAccessSee() {
-        return AccessSee;
+        return accessSee;
     }
 
     @Override
     public Boolean isAccessWrite() {
-        return AccessWrite;
+        return accessWrite;
     }
 
     @Override
     public Boolean isAccessChange() {
-        return AccessChange;
+        return accessChange;
     }
 
     @Override
@@ -74,13 +74,13 @@ public class AuthorizationCommand implements Command {
 
     @Override
     public Boolean isAccessAdmin() {
-        return AccessAdmin;
+        return accessAdmin;
     }
 
     private String description = "Authorization: signin|login|password";
     private static final int countParam = 3;
-    Boolean AccessSee = false;
-    Boolean AccessWrite = false;
-    Boolean AccessChange = false;
-    Boolean AccessAdmin = false;
+    Boolean accessSee = false;
+    Boolean accessWrite = false;
+    Boolean accessChange = false;
+    Boolean accessAdmin = false;
 }

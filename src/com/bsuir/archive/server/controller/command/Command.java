@@ -14,4 +14,5 @@ public interface Command {
     Integer getCountParam();
 
     Boolean isAccessAdmin();
+
 }

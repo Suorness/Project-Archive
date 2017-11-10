@@ -29,17 +29,17 @@ public class LogOutCommand implements Command {
 
     @Override
     public Boolean isAccessSee() {
-        return AccessSee;
+        return accessSee;
     }
 
     @Override
     public Boolean isAccessWrite() {
-        return AccessWrite;
+        return accessWrite;
     }
 
     @Override
     public Boolean isAccessChange() {
-        return AccessChange;
+        return accessChange;
     }
 
     @Override
@@ -54,14 +54,14 @@ public class LogOutCommand implements Command {
 
     @Override
     public Boolean isAccessAdmin() {
-        return AccessAdmin;
+        return accessAdmin;
     }
 
 
     private String description = "Change user: logout";
     private static final int countParam = 1;
-    Boolean AccessSee = true;
-    Boolean AccessWrite = false;
-    Boolean AccessChange = false;
-    Boolean AccessAdmin = false;
+    Boolean accessSee = true;
+    Boolean accessWrite = false;
+    Boolean accessChange = false;
+    Boolean accessAdmin = false;
 }

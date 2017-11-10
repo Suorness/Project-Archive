@@ -38,17 +38,17 @@ public class DeleteDossierCommand implements Command {
 
     @Override
     public Boolean isAccessSee() {
-        return AccessSee;
+        return accessSee;
     }
 
     @Override
     public Boolean isAccessWrite() {
-        return AccessWrite;
+        return accessWrite;
     }
 
     @Override
     public Boolean isAccessChange() {
-        return AccessChange;
+        return accessChange;
     }
 
     @Override
@@ -63,13 +63,13 @@ public class DeleteDossierCommand implements Command {
 
     @Override
     public Boolean isAccessAdmin() {
-        return AccessAdmin;
+        return accessAdmin;
     }
 
     private static final int countParam = 4;
     private String description = "Delete a dossier: delete|firstname|lastname|group number";
-    Boolean AccessSee = false;
-    Boolean AccessWrite = true;
-    Boolean AccessChange = true;
-    Boolean AccessAdmin = false;
+    Boolean accessSee = false;
+    Boolean accessWrite = true;
+    Boolean accessChange = true;
+    Boolean accessAdmin = false;
 }
